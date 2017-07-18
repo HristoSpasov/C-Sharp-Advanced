@@ -1,0 +1,16 @@
+﻿using _05.Border_Control.Interfaces;
+
+namespace _05.Border_Control.Entities
+{
+    public class Robot : IDable, IRobot
+    {
+        public Robot(string id, string model)
+        {
+            this.Id = id;
+            this.Model = model;
+        }
+
+        public string Id { get; }
+        public string Model { get; }
+    }
+}
