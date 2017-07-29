@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SimpleJudje.Models
 {
-    internal class Student : IStudent
+    public class Student : IStudent, IComparable<IStudent>
     {
         private string userName;
         private readonly IDictionary<string, ICourse> enrolledCourses;
@@ -81,12 +81,22 @@ namespace SimpleJudje.Models
             this.marksByCourseName.Add(courseName, this.CalculateMark(scores));
         }
 
+        public override string ToString()
+        {
+            return this.UserName;
+        }
+
         private double CalculateMark(int[] scores)
         {
             double percentageOfSolvedExam = scores.Sum() /
                                             (double)(Course.NumberOfTasksOnExam * Course.MaxScoresOnExamTask);
             double mark = percentageOfSolvedExam * 4 + 2;
             return mark;
+        }
+
+        public int CompareTo(IStudent other)
+        {
+            return String.Compare(this.UserName, other.UserName, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

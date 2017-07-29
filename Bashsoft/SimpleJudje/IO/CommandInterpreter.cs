@@ -73,6 +73,9 @@ namespace SimpleJudje.IO
                 case "dropdb":
                     return new DropDatabaseCommand(input, data, this.judge, this.repository, this.inputOutputManager);
 
+                case "display":
+                    return new DisplayCommand(input, data, this.judge, this.repository, this.inputOutputManager);
+
                 default:
                     throw new InvalidCommandException(input);
             }

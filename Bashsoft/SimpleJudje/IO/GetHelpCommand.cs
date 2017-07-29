@@ -33,6 +33,7 @@ namespace SimpleJudje.IO
             OutputWriter.WriteMessageOnNewLine(string.Format("|{0, -98}|", "download file - download: path of file (saved in current directory)"));
             OutputWriter.WriteMessageOnNewLine(string.Format("|{0, -98}|", "download file asinchronously - downloadAsynch: path of file (save in the current directory)"));
             OutputWriter.WriteMessageOnNewLine(string.Format("|{0, -98}|", "get help – help"));
+            OutputWriter.WriteMessageOnNewLine(string.Format("|{0, -98}|", "display data entities – display students/courses ascending/descending"));
             OutputWriter.WriteMessageOnNewLine($"{new string('_', 100)}");
             OutputWriter.WriteEmptyLine();
         }

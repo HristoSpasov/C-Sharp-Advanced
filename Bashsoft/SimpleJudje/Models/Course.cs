@@ -1,10 +1,11 @@
-﻿using SimpleJudje.Contracts;
+﻿using System;
+using SimpleJudje.Contracts;
 using SimpleJudje.Exceptions;
 using System.Collections.Generic;
 
 namespace SimpleJudje.Models
 {
-    internal class Course : ICourse
+    internal class Course : ICourse, IComparable<ICourse>
     {
         public const int NumberOfTasksOnExam = 5;
         public const int MaxScoresOnExamTask = 100;
@@ -47,6 +48,16 @@ namespace SimpleJudje.Models
             }
 
             this.studentsByName.Add(student.UserName, student);
+        }
+
+        public int CompareTo(ICourse other)
+        {
+            return String.Compare(this.Name, other.Name, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override string ToString()
+        {
+            return this.name;
         }
     }
 }

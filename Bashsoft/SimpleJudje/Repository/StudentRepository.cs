@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SimpleJudje.DataStructures;
 
 namespace SimpleJudje.Repository
 {
@@ -176,6 +177,22 @@ namespace SimpleJudje.Repository
             {
                 OutputWriter.WriteMessageOnNewLine($"Course {courseName} does not exist!");
             }
+        }
+
+        public ISimpleOrderedBag<ICourse> GetAllCoursesSorted(IComparer<ICourse> cmp)
+        {
+            SimpleSortedList<ICourse> sordedCourses = new SimpleSortedList<ICourse>(cmp);
+            sordedCourses.AdAll(this.courses.Values);
+
+            return sordedCourses;
+        }
+
+        public ISimpleOrderedBag<IStudent> GetAllStudentsSorted(IComparer<IStudent> cmp)
+        {
+            SimpleSortedList<IStudent> sortedStudents = new SimpleSortedList<IStudent>(cmp);
+            sortedStudents.AdAll(this.students.Values);
+
+            return sortedStudents;
         }
 
         private bool CourseExists(string courseName)
