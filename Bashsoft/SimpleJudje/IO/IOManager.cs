@@ -1,10 +1,11 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-using System;
-using System.IO;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using System;
+    using System.IO;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+    using DirectoryInfo = SimpleJudje.DirectoryInfo;
+
     public class IOManager : IDirectoryManager
     {
         public void TraverseDirectory(int depth)
@@ -27,22 +28,17 @@ namespace SimpleJudje.IO
             }
         }
 
-        private string GetCurrentDirectoryPath()
-        {
-            return SessionData.currentPath;
-        }
-
         public void ChangeCurrentDirectoryRelative(string relativePath)
         {
             if (relativePath == "..")
             {
                 try
                 {
-                    string currentPath = SessionData.currentPath;
+                    string currentPath = SessionData.CurrentPath;
                     int indexOfLastSlash = currentPath.LastIndexOf('\\');
                     string newPath = currentPath.Substring(0, indexOfLastSlash);
 
-                    SessionData.currentPath = newPath;
+                    SessionData.CurrentPath = newPath;
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -51,7 +47,7 @@ namespace SimpleJudje.IO
             }
             else
             {
-                string currentPath = SessionData.currentPath;
+                string currentPath = SessionData.CurrentPath;
                 currentPath += "\\" + relativePath;
                 this.ChangeCurrentDirectoryAbsolute(currentPath);
             }
@@ -65,7 +61,12 @@ namespace SimpleJudje.IO
                 throw new InvalidPathException();
             }
 
-            SessionData.currentPath = absolutePath;
+            SessionData.CurrentPath = absolutePath;
+        }
+
+        private string GetCurrentDirectoryPath()
+        {
+            return SessionData.CurrentPath;
         }
     }
 }

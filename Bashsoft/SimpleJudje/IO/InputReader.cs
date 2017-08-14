@@ -1,11 +1,11 @@
-﻿using SimpleJudje.Contracts;
-using System;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using System;
+    using SimpleJudje.Contracts;
+
     public class InputReader : IReader
     {
-        private const string endComand = "quit";
+        private const string EndComand = "quit";
         private readonly IInterpreter interpreter;
 
         public InputReader(IInterpreter interpreter)
@@ -15,7 +15,7 @@ namespace SimpleJudje.IO
 
         public void StartReadingCommands()
         {
-            OutputWriter.WriteMessage($"{SessionData.currentPath}> ");
+            OutputWriter.WriteMessage($"{SessionData.CurrentPath}> ");
             string input = Console.ReadLine();
             input = input.Trim();
             this.interpreter.InterpreteCommand(input); // Proces command input
@@ -23,13 +23,13 @@ namespace SimpleJudje.IO
             while (true)
             {
                 // Interpret command
-                OutputWriter.WriteMessage($"{SessionData.currentPath}> ");
+                OutputWriter.WriteMessage($"{SessionData.CurrentPath}> ");
                 input = Console.ReadLine();
                 input = input.Trim();
 
                 this.interpreter.InterpreteCommand(input); // Proces command input
 
-                if (input == endComand)
+                if (input == EndComand)
                 {
                     // Close program
                     break;

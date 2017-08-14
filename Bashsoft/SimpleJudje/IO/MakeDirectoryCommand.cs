@@ -1,11 +1,16 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using SimpleJudje.Attributes;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
+    [Alias("mkdir")]
     public class MakeDirectoryCommand : Command, IExecutable
     {
-        public MakeDirectoryCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManagar) : base(input, data, judge, repository, inputOutputManagar)
+        [Inject]
+        private IDirectoryManager inputOutputManager;
+
+        public MakeDirectoryCommand(string input, string[] data) : base(input, data)
         {
         }
 
@@ -17,7 +22,7 @@ namespace SimpleJudje.IO
             }
 
             string folderName = this.Data[1];
-            this.InputOutputManager.CreateDirectoryInCurrentFolder(folderName);
+            this.inputOutputManager.CreateDirectoryInCurrentFolder(folderName);
         }
     }
 }

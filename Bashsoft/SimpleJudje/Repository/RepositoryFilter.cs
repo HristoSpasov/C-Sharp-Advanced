@@ -1,9 +1,9 @@
-﻿using SimpleJudje.Contracts;
-using System;
-using System.Collections.Generic;
-
-namespace SimpleJudje.Repository
+﻿namespace SimpleJudje.Repository
 {
+    using System;
+    using System.Collections.Generic;
+    using SimpleJudje.Contracts;
+
     public class RepositoryFilter : IDataFilter
     {
         public void FilterAndTake(Dictionary<string, double> studentWithMarks, string wantedFilter, int studentsToTake)

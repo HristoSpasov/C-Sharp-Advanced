@@ -1,11 +1,16 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using SimpleJudje.Attributes;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
+    [Alias("cdabs")]
     public class ChangeAbsolutePathCommand : Command, IExecutable
     {
-        public ChangeAbsolutePathCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManagar) : base(input, data, judge, repository, inputOutputManagar)
+        [Inject]
+        private readonly IDirectoryManager inputOutputManager;
+
+        public ChangeAbsolutePathCommand(string input, string[] data) : base(input, data)
         {
         }
 
@@ -14,7 +19,7 @@ namespace SimpleJudje.IO
             if (this.Data.Length == 2)
             {
                 string absolutePath = this.Data[1];
-                this.InputOutputManager.ChangeCurrentDirectoryAbsolute(absolutePath);
+                this.inputOutputManager.ChangeCurrentDirectoryAbsolute(absolutePath);
             }
             else
             {

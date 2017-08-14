@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SimpleJudje.Exceptions
+﻿namespace SimpleJudje.Exceptions
 {
+    using System;
+
     public class CourseNotFoundException : Exception
     {
         private const string CourseNotFoundMessage = "Course not found";

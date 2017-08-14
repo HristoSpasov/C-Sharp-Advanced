@@ -1,20 +1,20 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-using SimpleJudje.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using SimpleJudje.DataStructures;
-
-namespace SimpleJudje.Repository
+﻿namespace SimpleJudje.Repository
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.DataStructures;
+    using SimpleJudje.Exceptions;
+    using SimpleJudje.Models;
+
     public class StudentRepository : IDatabase
     {
-        private bool isDataInitialized;
         private readonly RepositoryFilter filter;
         private readonly RepositorySorter sorter;
+        private bool isDataInitialized;
         private Dictionary<string, ICourse> courses;
         private Dictionary<string, IStudent> students;
 
@@ -85,9 +85,52 @@ namespace SimpleJudje.Repository
             }
         }
 
+        public void GetAllStudentsFromCourse(string courseName)
+        {
+            if (this.CourseExists(courseName))
+            {
+                foreach (var studentMarksEntry in this.courses[courseName].StudentsByName)
+                {
+                    this.GetStudentScoresFromCourse(courseName, studentMarksEntry.Key);
+                }
+            }
+            else
+            {
+                OutputWriter.WriteMessageOnNewLine($"Course {courseName} does not exist!");
+            }
+        }
+
+        public ISimpleOrderedBag<ICourse> GetAllCoursesSorted(IComparer<ICourse> cmp)
+        {
+            SimpleSortedList<ICourse> sordedCourses = new SimpleSortedList<ICourse>(cmp);
+            sordedCourses.AdAll(this.courses.Values);
+
+            return sordedCourses;
+        }
+
+        public ISimpleOrderedBag<IStudent> GetAllStudentsSorted(IComparer<IStudent> cmp)
+        {
+            SimpleSortedList<IStudent> sortedStudents = new SimpleSortedList<IStudent>(cmp);
+            sortedStudents.AdAll(this.students.Values);
+
+            return sortedStudents;
+        }
+
+        public void GetStudentScoresFromCourse(string courseName, string userName)
+        {
+            if (this.UserNameExists(userName, courseName))
+            {
+                OutputWriter.PrintStudent(new KeyValuePair<string, double>(userName, this.courses[courseName].StudentsByName[userName].MarksByCourseName[courseName]));
+            }
+            else
+            {
+                OutputWriter.WriteMessageOnNewLine($"Course '{courseName}' or user '{userName}' does not exist in database!");
+            }
+        }
+
         private void ReadData(string fileName)
         {
-            string path = SessionData.currentPath + "\\" + fileName;
+            string path = SessionData.CurrentPath + "\\" + fileName;
 
             if (File.Exists(path))
             {
@@ -160,39 +203,7 @@ namespace SimpleJudje.Repository
                 {
                     OutputWriter.WriteMessage(ex.Message);
                 }
-                //OutputWriter.WriteMessage(ExceptionMessages.InvalidPath);
             }
-        }
-
-        public void GetAllStudentsFromCourse(string courseName)
-        {
-            if (this.CourseExists(courseName))
-            {
-                foreach (var studentMarksEntry in this.courses[courseName].StudentsByName)
-                {
-                    this.GetStudentScoresFromCourse(courseName, studentMarksEntry.Key);
-                }
-            }
-            else
-            {
-                OutputWriter.WriteMessageOnNewLine($"Course {courseName} does not exist!");
-            }
-        }
-
-        public ISimpleOrderedBag<ICourse> GetAllCoursesSorted(IComparer<ICourse> cmp)
-        {
-            SimpleSortedList<ICourse> sordedCourses = new SimpleSortedList<ICourse>(cmp);
-            sordedCourses.AdAll(this.courses.Values);
-
-            return sordedCourses;
-        }
-
-        public ISimpleOrderedBag<IStudent> GetAllStudentsSorted(IComparer<IStudent> cmp)
-        {
-            SimpleSortedList<IStudent> sortedStudents = new SimpleSortedList<IStudent>(cmp);
-            sortedStudents.AdAll(this.students.Values);
-
-            return sortedStudents;
         }
 
         private bool CourseExists(string courseName)
@@ -203,18 +214,6 @@ namespace SimpleJudje.Repository
             }
 
             return false;
-        }
-
-        public void GetStudentScoresFromCourse(string courseName, string userName)
-        {
-            if (this.UserNameExists(userName, courseName))
-            {
-                OutputWriter.PrintStudent(new KeyValuePair<string, double>(userName, this.courses[courseName].StudentsByName[userName].MarksByCourseName[courseName]));
-            }
-            else
-            {
-                OutputWriter.WriteMessageOnNewLine($"Course '{courseName}' or user '{userName}' does not exist in database!");
-            }
         }
 
         private bool UserNameExists(string userName, string courseName)

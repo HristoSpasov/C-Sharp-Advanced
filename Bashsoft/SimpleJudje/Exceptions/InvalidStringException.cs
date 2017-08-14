@@ -1,13 +1,13 @@
-﻿using System;
-
-namespace SimpleJudje.Exceptions
+﻿namespace SimpleJudje.Exceptions
 {
+    using System;
+
     public class InvalidStringException : Exception
     {
-        private const string invalidStringExceptionMessage = "String cannot be empty!";
+        private const string InvalidStringExceptionMessage = "String cannot be empty!";
 
         public InvalidStringException()
-            : base(invalidStringExceptionMessage)
+            : base(InvalidStringExceptionMessage)
         {
         }
 

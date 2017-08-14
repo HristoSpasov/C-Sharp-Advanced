@@ -1,11 +1,16 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using SimpleJudje.Attributes;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
+    [Alias("dropdb")]
     public class DropDatabaseCommand : Command, IExecutable
     {
-        public DropDatabaseCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManagar) : base(input, data, judge, repository, inputOutputManagar)
+        [Inject]
+        private readonly IDatabase repository;
+
+        public DropDatabaseCommand(string input, string[] data) : base(input, data)
         {
         }
 
@@ -16,7 +21,7 @@ namespace SimpleJudje.IO
                 throw new InvalidCommandException(this.Input);
             }
 
-            this.Repository.UnloadData();
+            this.repository.UnloadData();
             OutputWriter.WriteMessageOnNewLine("Database dropped!");
         }
     }

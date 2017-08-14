@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace SimpleJudje.Contracts
+﻿namespace SimpleJudje.Contracts
 {
+    using System.Collections.Generic;
+
     public interface IRequester
     {
         void GetStudentScoresFromCourse(string courseName, string userName);

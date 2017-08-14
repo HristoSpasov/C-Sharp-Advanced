@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace SimpleJudje.Contracts
+﻿namespace SimpleJudje.Contracts
 {
+    using System.Collections.Generic;
+
     public interface IDataFilter
     {
         void FilterAndTake(Dictionary<string, double> studentWithMarks, string wantedFilter, int studentsToTake);

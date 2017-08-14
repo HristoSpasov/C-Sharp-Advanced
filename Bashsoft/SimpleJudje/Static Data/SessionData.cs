@@ -1,9 +1,16 @@
-﻿using System.IO;
-
-namespace SimpleJudje
+﻿namespace SimpleJudje
 {
+    using System.IO;
+
     public static class SessionData
     {
-        public static string currentPath = Directory.GetCurrentDirectory();
+        private static string currentPath = Directory.GetCurrentDirectory();
+
+        public static string CurrentPath
+        {
+            get { return currentPath; }
+
+            set { currentPath = value; }
+        }
     }
 }

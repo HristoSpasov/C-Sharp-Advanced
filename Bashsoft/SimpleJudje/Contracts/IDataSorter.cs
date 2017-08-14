@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-
-namespace SimpleJudje.Contracts
+﻿namespace SimpleJudje.Contracts
 {
+    using System.Collections.Generic;
+
     public interface IDataSorter
     {
-        void OrderAndTake(Dictionary<string, double> studentWithMarks,
-            string comparison, int studentsToTake);
+        void OrderAndTake(Dictionary<string, double> studentWithMarks, string comparison, int studentsToTake);
     }
 }

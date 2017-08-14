@@ -1,10 +1,10 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.IO;
-using SimpleJudje.Judje;
-using SimpleJudje.Repository;
-
-namespace SimpleJudje
+﻿namespace SimpleJudje
 {
+    using SimpleJudje.Contracts;
+    using SimpleJudje.IO;
+    using SimpleJudje.Judje;
+    using SimpleJudje.Repository;
+
     public class BashSoft
     {
         public static void Main()

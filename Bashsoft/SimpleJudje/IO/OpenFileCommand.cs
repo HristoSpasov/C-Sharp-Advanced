@@ -1,12 +1,14 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-using System.Diagnostics;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using System.Diagnostics;
+    using SimpleJudje.Attributes;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
+    [Alias("open")]
     public class OpenFileCommand : Command, IExecutable
     {
-        public OpenFileCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager)
+        public OpenFileCommand(string input, string[] data) : base(input, data)
         {
         }
 
@@ -18,7 +20,7 @@ namespace SimpleJudje.IO
             }
 
             string fileName = this.Data[1];
-            Process.Start(SessionData.currentPath + "\\" + fileName);
+            Process.Start(SessionData.CurrentPath + "\\" + fileName);
         }
     }
 }

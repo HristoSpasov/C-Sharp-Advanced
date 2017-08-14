@@ -1,11 +1,13 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using SimpleJudje.Attributes;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
+    [Alias("help")]
     public class GetHelpCommand : Command, IExecutable
     {
-        public GetHelpCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManagar) : base(input, data, judge, repository, inputOutputManagar)
+        public GetHelpCommand(string input, string[] data) : base(input, data)
         {
         }
 

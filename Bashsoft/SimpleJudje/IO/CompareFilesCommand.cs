@@ -1,11 +1,16 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using SimpleJudje.Attributes;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
+    [Alias("cmp")]
     public class CompareFilesCommand : Command, IExecutable
     {
-        public CompareFilesCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManagar) : base(input, data, judge, repository, inputOutputManagar)
+        [Inject]
+        private readonly IContentComparer judge;
+
+        public CompareFilesCommand(string input, string[] data) : base(input, data)
         {
         }
 
@@ -16,7 +21,7 @@ namespace SimpleJudje.IO
                 string firstPath = this.Data[1];
                 string secondPath = this.Data[2];
 
-                this.Judge.CompareContent(firstPath, secondPath);
+                this.judge.CompareContent(firstPath, secondPath);
             }
             else
             {

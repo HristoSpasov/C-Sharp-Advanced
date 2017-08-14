@@ -1,10 +1,10 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-using System;
-using System.IO;
-
-namespace SimpleJudje.Judje
+﻿namespace SimpleJudje.Judje
 {
+    using System;
+    using System.IO;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
     public class Tester : IContentComparer
     {
         public void CompareContent(string userOutputPath, string expectedOutputPath)
@@ -76,9 +76,7 @@ namespace SimpleJudje.Judje
 
                 if (!currUserLine.Equals(currExpectedLine))
                 {
-                    output = string.Format("Mismatch at line {0} --" +
-                                           "expected: \"{1}\", actual: \"{2}\"",
-                        i, currUserLine, currExpectedLine);
+                    output = string.Format("Mismatch at line {0} -- expected: \"{1}\", actual: \"{2}\"", i, currUserLine, currExpectedLine);
                     output += Environment.NewLine;
 
                     hasMismatch = true;

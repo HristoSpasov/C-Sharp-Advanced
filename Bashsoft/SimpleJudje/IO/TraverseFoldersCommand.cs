@@ -1,11 +1,16 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using SimpleJudje.Attributes;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
+    [Alias("ls")]
     public class TraverseFoldersCommand : Command, IExecutable
     {
-        public TraverseFoldersCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManagar) : base(input, data, judge, repository, inputOutputManagar)
+        [Inject]
+        private readonly IDirectoryManager inputOutputManager;
+
+        public TraverseFoldersCommand(string input, string[] data) : base(input, data)
         {
         }
 
@@ -18,7 +23,7 @@ namespace SimpleJudje.IO
 
             if (this.Data.Length == 1)
             {
-                this.InputOutputManager.TraverseDirectory(0); // No params so travrse curr dir
+                this.inputOutputManager.TraverseDirectory(0); // No params so travrse curr dir
             }
             else if (this.Data.Length == 2)
             {
@@ -26,7 +31,7 @@ namespace SimpleJudje.IO
                 bool hasParsed = int.TryParse(this.Data[1], out depth);
                 if (hasParsed)
                 {
-                    this.InputOutputManager.TraverseDirectory(depth);
+                    this.inputOutputManager.TraverseDirectory(depth);
                 }
                 else
                 {

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SimpleJudje.Exceptions
+﻿namespace SimpleJudje.Exceptions
 {
+    using System;
+
     public class InvalidPathException : Exception
     {
         private const string InvalidPath = "The sourse does not exist.";

@@ -1,9 +1,11 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-using System;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using SimpleJudje.Attributes;
+    using SimpleJudje.Contracts;
+
     public class CommandInterpreter : IInterpreter
     {
         private readonly IContentComparer judge;
@@ -33,52 +35,41 @@ namespace SimpleJudje.IO
             }
         }
 
-        private Command ParseCommand(string input, string command, string[] data)
+        private IExecutable ParseCommand(string input, string command, string[] data)
         {
-            switch (command)
+            object[] parametersForConstruction = new object[]
             {
-                case "open":
-                    return new OpenFileCommand(input, data, this.judge, this.repository, this.inputOutputManager);
+                input, data
+            };
 
-                case "mkdir":
-                    return new MakeDirectoryCommand(input, data, this.judge, this.repository, this.inputOutputManager);
+            Type typeOfCommand =
+                Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .First(type => type.GetCustomAttributes(typeof(AliasAttribute))
+                                       .Where(atr => atr.Equals(command))
+                                       .ToArray().Length > 0);
 
-                case "ls":
-                    return new TraverseFoldersCommand(input, data, this.judge, this.repository, this.inputOutputManager);
+            Type typeOfInterpreter = typeof(CommandInterpreter);
 
-                case "cmp":
-                    return new CompareFilesCommand(input, data, this.judge, this.repository, this.inputOutputManager);
+            Command cmd = (Command)Activator.CreateInstance(typeOfCommand, parametersForConstruction);
 
-                case "cdrel":
-                    return new ChangeRelativePathCommand(input, data, this.judge, this.repository, this.inputOutputManager);
+            FieldInfo[] fieldsOfCommand = typeOfCommand.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            FieldInfo[] fieldsOfInterpreter = typeOfInterpreter.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
 
-                case "cdabs":
-                    return new ChangeAbsolutePathCommand(input, data, this.judge, this.repository, this.inputOutputManager);
+            foreach (var fieldOfCommand in fieldsOfCommand)
+            {
+                Attribute atr = fieldOfCommand.GetCustomAttribute(typeof(InjectAttribute));
 
-                case "readdb":
-                    return new ReadDatabaseCommand(input, data, this.judge, this.repository, this.inputOutputManager);
-
-                case "help":
-                    return new GetHelpCommand(input, data, this.judge, this.repository, this.inputOutputManager);
-
-                case "show":
-                    return new ShowCourseCommand(input, data, this.judge, this.repository, this.inputOutputManager);
-
-                case "filter":
-                    return new PrintFilteredStudentsCommand(input, data, this.judge, this.repository, this.inputOutputManager);
-
-                case "order":
-                    return new PrintOrderedStudentsCommand(input, data, this.judge, this.repository, this.inputOutputManager);
-
-                case "dropdb":
-                    return new DropDatabaseCommand(input, data, this.judge, this.repository, this.inputOutputManager);
-
-                case "display":
-                    return new DisplayCommand(input, data, this.judge, this.repository, this.inputOutputManager);
-
-                default:
-                    throw new InvalidCommandException(input);
+                if (atr != null)
+                {
+                    if (fieldsOfInterpreter.Any(ft => ft.FieldType == fieldOfCommand.FieldType))
+                    {
+                        fieldOfCommand.SetValue(cmd, fieldsOfInterpreter.First(ft => ft.FieldType == fieldOfCommand.FieldType).GetValue(this));
+                    }
+                }
             }
+
+            return cmd;
         }
     }
 }

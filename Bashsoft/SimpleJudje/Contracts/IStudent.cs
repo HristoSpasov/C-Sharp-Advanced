@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SimpleJudje.Contracts
+﻿namespace SimpleJudje.Contracts
 {
+    using System;
+    using System.Collections.Generic;
+
     public interface IStudent : IComparable<IStudent>
     {
         string UserName { get; }

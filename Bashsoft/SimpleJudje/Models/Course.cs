@@ -1,17 +1,16 @@
-﻿using System;
-using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-using System.Collections.Generic;
-
-namespace SimpleJudje.Models
+﻿namespace SimpleJudje.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
     internal class Course : ICourse, IComparable<ICourse>
     {
         public const int NumberOfTasksOnExam = 5;
         public const int MaxScoresOnExamTask = 100;
-
-        private string name;
         private readonly Dictionary<string, IStudent> studentsByName;
+        private string name;
 
         public Course(string name)
         {
@@ -21,7 +20,11 @@ namespace SimpleJudje.Models
 
         public string Name
         {
-            get { return this.name; }
+            get
+            {
+                return this.name;
+            }
+
             set
             {
                 if (string.IsNullOrEmpty(value))
@@ -43,8 +46,6 @@ namespace SimpleJudje.Models
             if (this.studentsByName.ContainsKey(student.UserName))
             {
                 throw new DuplicateEntryInStructureException(student.UserName, this.Name);
-                //OutputWriter.DisplayException(string.Format(ExceptionMessages.StudentAlreadyEnrolledInGivenCourse, student.UserName, this.Name));
-                //return;
             }
 
             this.studentsByName.Add(student.UserName, student);
@@ -52,7 +53,7 @@ namespace SimpleJudje.Models
 
         public int CompareTo(ICourse other)
         {
-            return String.Compare(this.Name, other.Name, StringComparison.OrdinalIgnoreCase);
+            return string.Compare(this.Name, other.Name, StringComparison.OrdinalIgnoreCase);
         }
 
         public override string ToString()

@@ -1,16 +1,16 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace SimpleJudje.Models
+﻿namespace SimpleJudje.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
     public class Student : IStudent, IComparable<IStudent>
     {
-        private string userName;
         private readonly IDictionary<string, ICourse> enrolledCourses;
         private readonly IDictionary<string, double> marksByCourseName;
+        private string userName;
 
         public Student(string userName)
         {
@@ -52,9 +52,6 @@ namespace SimpleJudje.Models
         {
             if (this.enrolledCourses.ContainsKey(course.Name))
             {
-                //OutputWriter.DisplayException(string.Format(ExceptionMessages.StudentAlreadyEnrolledInGivenCourse, this.userName, course.Name));
-                //return;
-                // throw new ArgumentNullException(string.Format(ExceptionMessages.StudentAlreadyEnrolledInGivenCourse, this.userName, course.Name));
                 throw new DuplicateEntryInStructureException(this.UserName, course.Name);
             }
 
@@ -65,16 +62,11 @@ namespace SimpleJudje.Models
         {
             if (!this.enrolledCourses.ContainsKey(courseName))
             {
-                //OutputWriter.DisplayException(ExceptionMessages.NotEnrolledInCourse);
-                //return
-                // throw new ArgumentNullException(ExceptionMessages.NotEnrolledInCourse);
                 throw new CourseNotFoundException();
             }
 
             if (scores.Length > Course.NumberOfTasksOnExam)
             {
-                //OutputWriter.DisplayException(ExceptionMessages.InvalidNumberOfScores);
-                //return;
                 throw new ArgumentNullException(ExceptionMessages.InvalidNumberOfScores);
             }
 
@@ -86,17 +78,17 @@ namespace SimpleJudje.Models
             return this.UserName;
         }
 
+        public int CompareTo(IStudent other)
+        {
+            return string.Compare(this.UserName, other.UserName, StringComparison.OrdinalIgnoreCase);
+        }
+
         private double CalculateMark(int[] scores)
         {
             double percentageOfSolvedExam = scores.Sum() /
                                             (double)(Course.NumberOfTasksOnExam * Course.MaxScoresOnExamTask);
-            double mark = percentageOfSolvedExam * 4 + 2;
+            double mark = (percentageOfSolvedExam * 4) + 2;
             return mark;
-        }
-
-        public int CompareTo(IStudent other)
-        {
-            return String.Compare(this.UserName, other.UserName, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace SimpleJudje
+﻿namespace SimpleJudje
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     public static class DirectoryInfo
     {
         public static void TraverseDirectory(int depth)
         {
             OutputWriter.WriteEmptyLine();
-            int initialIdentation = SessionData.currentPath.Split('\\').Length;
+            int initialIdentation = SessionData.CurrentPath.Split('\\').Length;
             Queue<string> subFolders = new Queue<string>();
-            subFolders.Enqueue(SessionData.currentPath);
+            subFolders.Enqueue(SessionData.CurrentPath);
 
             while (subFolders.Count != 0)
             {

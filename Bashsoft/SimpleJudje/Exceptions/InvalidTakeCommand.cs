@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SimpleJudje.Exceptions
+﻿namespace SimpleJudje.Exceptions
 {
+    using System;
+
     public class InvalidTakeCommand : Exception
     {
         private const string InvalidTake = "{0} is invalid take command! Use 'take'.";

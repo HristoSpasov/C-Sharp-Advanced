@@ -1,11 +1,16 @@
-﻿using SimpleJudje.Contracts;
-using SimpleJudje.Exceptions;
-
-namespace SimpleJudje.IO
+﻿namespace SimpleJudje.IO
 {
+    using SimpleJudje.Attributes;
+    using SimpleJudje.Contracts;
+    using SimpleJudje.Exceptions;
+
+    [Alias("order")]
     public class PrintOrderedStudentsCommand : Command, IExecutable
     {
-        public PrintOrderedStudentsCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManagar) : base(input, data, judge, repository, inputOutputManagar)
+        [Inject]
+        private readonly IDatabase repository;
+
+        public PrintOrderedStudentsCommand(string input, string[] data) : base(input, data)
         {
         }
 
@@ -32,7 +37,7 @@ namespace SimpleJudje.IO
             {
                 if (takeQuantity == "all")
                 {
-                    this.Repository.OrderAndTake(courseName, order);
+                    this.repository.OrderAndTake(courseName, order);
                 }
                 else
                 {
@@ -41,7 +46,7 @@ namespace SimpleJudje.IO
 
                     if (hasParsed)
                     {
-                        this.Repository.OrderAndTake(courseName, order, studentsToTake);
+                        this.repository.OrderAndTake(courseName, order, studentsToTake);
                     }
                     else
                     {
